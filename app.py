@@ -5,7 +5,7 @@ import time
 
 # 1. PAGE CONFIG
 st.set_page_config(
-    page_title="Edutech Corporate",
+    page_title="Edutech Corporate System",
     page_icon="🎓",
     layout="wide"
 )
@@ -25,40 +25,32 @@ with st.sidebar:
     """)
     
     st.divider()
-    
     st.markdown("### 👨‍💻 Developer")
     st.write("**Naufal Daffa Erlangga**")
-    st.caption("Data Science Student & Developer")
     
     st.divider()
-    
     with st.expander("📖 Panduan Singkat"):
         st.write("""
-        1. Pilih tab **Predictor**.
-        2. Masukkan data sesuai profil mahasiswa.
-        3. Klik **Run Analysis**.
-        4. Hasil dan tingkat keyakinan model akan muncul di bawah.
+        1. Masukkan data profil mahasiswa.
+        2. Klik **Run Analysis**.
+        3. Lihat hasil prediksi dan rekomendasi tindakan.
         """)
-    
-    st.info("Sistem ini menggunakan algoritma Random Forest dengan akurasi yang telah diuji.")
 
 # 4. MAIN CONTENT
-st.title("🎓 Student Diagnostic System")
-st.write("Gunakan sistem ini untuk mendeteksi dini risiko dropout mahasiswa.")
+st.title("🎓 Edutech Corporate Diagnostic System")
+st.write("Sistem Pendeteksi Risiko Kelulusan Mahasiswa.")
 
-# Menggunakan Tabs untuk Navigasi
 tab1, tab2 = st.tabs(["🔍 Predictor", "ℹ️ Informasi Fitur"])
 
 with tab1:
     st.subheader("Data Input")
     
-    # Bungkus dalam form biar nggak auto-reload tiap ngetik
     with st.form("input_form"):
         col1, col2 = st.columns(2)
         
         with col1:
             st.write("**📝 Performa Akademik**")
-            s1_grade = st.number_input("IPK Semester 1 (0-20)", 0.0, 20.0, 12.0, help="Skala nilai 0 sampai 20")
+            s1_grade = st.number_input("IPK Semester 1 (0-20)", 0.0, 20.0, 12.0)
             s1_approved = st.number_input("SKS Lulus Sem 1", 0, 30, 15)
             s2_grade = st.number_input("IPK Semester 2 (0-20)", 0.0, 20.0, 12.0)
             s2_approved = st.number_input("SKS Lulus Sem 2", 0, 30, 15)
@@ -72,15 +64,12 @@ with tab1:
             gender = st.selectbox("Jenis Kelamin", ["Wanita", "Pria"])
             age = st.slider("Usia Saat Daftar", 15, 60, 20)
 
-        # Tombol Submit
         submit_button = st.form_submit_button("🚀 Run Analysis", use_container_width=True)
 
-    # Logika Prediksi setelah tombol diklik
     if submit_button:
         with st.spinner('Sedang memproses data...'):
             time.sleep(1)
             
-            # Mapping input ke format model
             input_data = {
                 'Curricular_units_2nd_sem_approved': s2_approved,
                 'Curricular_units_2nd_sem_grade': s2_grade,
@@ -95,10 +84,7 @@ with tab1:
             }
 
             df_input = pd.DataFrame([input_data])
-            
-            # Prediksi
             prediction = model.predict(df_input)[0]
-            # Ambil probabilitas
             probability = model.predict_proba(df_input)[0]
             
             st.divider()
@@ -118,11 +104,15 @@ with tab1:
                 st.write(f"**Tingkat Keyakinan (Confidence):** {conf_score*100:.2f}%")
                 st.progress(conf_score)
 
-            # Pesan Tambahan
-            if prediction == 1:
-                st.warning("Mahasiswa terdeteksi berisiko tinggi. Disarankan pihak akademik melakukan konsultasi personal.")
-            else:
-                st.info("Mahasiswa menunjukkan performa yang baik. Dorong untuk terus mempertahankan prestasinya.")
+            # BAGIAN ACTION ITEMS
+            st.markdown("### 📋 Rekomendasi Action Items")
+            st.write(f"Berdasarkan profil mahasiswa di atas, berikut adalah langkah yang perlu diambil:")
+            
+            st.markdown(f"""
+            1. **Monitoring Penurunan Nilai:** Mengaktifkan program pendampingan (mentoring) khusus bagi mahasiswa yang nilai semester 2-nya turun signifikan dibanding semester 1.
+            2. **Pemberian Skema Keringanan Biaya:** Memberikan opsi cicilan atau bantuan darurat bagi mahasiswa yang terdeteksi sebagai 'Debtor' agar tidak terpaksa putus kuliah.
+            3. **Automasi Prediksi:** Mengintegrasikan model machine learning ini ke dalam portal akademik sebagai sistem deteksi dini bagi dosen pembimbing akademik.
+            """)
 
 with tab2:
     st.subheader("Detail Fitur")
@@ -131,10 +121,8 @@ with tab2:
     - **Akademik:** Nilai IPK dan jumlah SKS yang lulus di semester 1 dan 2.
     - **Finansial:** Status beasiswa, pelunasan uang kuliah, dan tunggakan utang.
     - **Demografi:** Usia saat mendaftar dan jenis kelamin.
-    - **Administrasi:** Mode aplikasi saat masuk ke institusi.
     """)
-    st.write("Seluruh data diproses secara anonim untuk keperluan analisis prediksi.")
 
 # FOOTER
 st.divider()
-st.caption("© 2026 Edutech Corporate System | Created by Naufal Daffa Erlangga")
+st.caption("© 2026 Edutech Corporate System | Naufal Daffa Erlangga")
