@@ -69,6 +69,8 @@ Proyek ini menyertakan prototipe sistem prediksi berbasis web menggunakan **Stre
 Berdasarkan hasil analisis dan pemodelan, dapat disimpulkan bahwa penurunan performa akademik di semester kedua merupakan indikator terkuat mahasiswa akan dropout. Selain itu, kondisi finansial (debtor) memiliki pengaruh besar, di mana mahasiswa dengan tunggakan biaya memiliki risiko berhenti kuliah jauh lebih tinggi. Beasiswa terbukti menjadi faktor pendukung utama yang menjaga tingkat kelulusan tetap tinggi.
 
 ### Rekomendasi Action Items
-- **Monitoring Penurunan Nilai:** Mengaktifkan program pendampingan (mentoring) khusus bagi mahasiswa yang nilai semester 2-nya turun signifikan dibanding semester 1.
-- **Pemberian Skema Keringanan Biaya:** Memberikan opsi cicilan atau bantuan darurat bagi mahasiswa yang terdeteksi sebagai 'Debtor' agar tidak terpaksa putus kuliah.
+- **Monitoring Penurunan Nilai:** Sistem melakukan komparasi otomatis antara Semester 1 dan Semester 2.
+- **Pemberian Skema Keringanan Biaya:** Berdasarkan status finansial, jika mahasiswa terdeteksi sebagai 'Debtor' atau belum melunasi biaya kuliah, sistem merekomendasikan opsi cicilan atau bantuan dana darurat.
 - **Automasi Prediksi:** Mengintegrasikan model machine learning ini ke dalam portal akademik sebagai sistem deteksi dini bagi dosen pembimbing akademik.
+- **Optimasi & Peninjauan Beasiswa:** Bagi mahasiswa berisiko dropout yang belum menerima beasiswa, sistem memberikan saran peninjauan kelayakan bantuan dana untuk meningkatkan retensi.
+- **Automasi Prediksi:** Mengintegrasikan model machine learning ini ke dalam portal akademik sebagai sistem deteksi dini (Early Warning System) bagi dosen pembimbing akademik.
