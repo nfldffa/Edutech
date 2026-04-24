@@ -87,32 +87,44 @@ with tab1:
             prediction = model.predict(df_input)[0]
             probability = model.predict_proba(df_input)[0]
             
+            # BAGIAN HASIL & ANALISIS DINAMIS
             st.divider()
-            
-            # Tampilan Hasil
             res_col1, res_col2 = st.columns([1, 1])
             
-            with res_col1:
-                if prediction == 1:
+            if prediction == 1:
+                with res_col1:
                     st.error("### 🚨 Hasil: DROPOUT")
                     conf_score = probability[1]
-                else:
+                with res_col2:
+                    st.write(f"**Tingkat Risiko:** {conf_score*100:.2f}%")
+                    st.progress(conf_score)
+                
+                st.markdown("### 📋 Rekomendasi Action Items")
+                st.write("Berdasarkan deteksi risiko, berikut langkah yang disarankan:")
+                
+                # 1. Action buat yang nilainya turun (Peka Nilai)
+                if s2_grade < s1_grade:
+                    st.warning("**1. Monitoring Penurunan Nilai:** Mengaktifkan program pendampingan (mentoring) khusus karena nilai semester 2 turun dibanding semester 1.")
+                
+                # 2. Action buat yang punya hutang (Peka Finansial)
+                if debtor == "Ya":
+                    st.warning("**2. Pemberian Skema Keringanan Biaya:** Memberikan opsi cicilan atau bantuan darurat karena mahasiswa terdeteksi sebagai 'Debtor'.")
+                
+                # 3. Action umum
+                st.info("**3. Automasi Prediksi:** Mengintegrasikan model ini ke portal akademik sebagai sistem deteksi dini bagi dosen pembimbing.")
+
+            else:
+                with res_col1:
                     st.success("### ✅ Hasil: GRADUATE")
                     conf_score = probability[0]
-            
-            with res_col2:
-                st.write(f"**Tingkat Keyakinan (Confidence):** {conf_score*100:.2f}%")
-                st.progress(conf_score)
+                with res_col2:
+                    st.write(f"**Tingkat Keyakinan:** {conf_score*100:.2f}%")
+                    st.progress(conf_score)
 
-            # BAGIAN ACTION ITEMS
-            st.markdown("### 📋 Rekomendasi Action Items")
-            st.write(f"Berdasarkan profil mahasiswa di atas, berikut adalah langkah yang perlu diambil:")
-            
-            st.markdown(f"""
-            1. **Monitoring Penurunan Nilai:** Mengaktifkan program pendampingan (mentoring) khusus bagi mahasiswa yang nilai semester 2-nya turun signifikan dibanding semester 1.
-            2. **Pemberian Skema Keringanan Biaya:** Memberikan opsi cicilan atau bantuan darurat bagi mahasiswa yang terdeteksi sebagai 'Debtor' agar tidak terpaksa putus kuliah.
-            3. **Automasi Prediksi:** Mengintegrasikan model machine learning ini ke dalam portal akademik sebagai sistem deteksi dini bagi dosen pembimbing akademik.
-            """)
+                st.markdown("### 📋 Rekomendasi Action Items")
+                st.write("Mahasiswa terpantau aman, berikut langkah pemeliharaan:")
+                st.success("1. **Apresiasi Performa:** Pertahankan konsistensi nilai untuk persiapan kelulusan tepat waktu.")
+                st.info("2. **Program Peer-Mentoring:** Mahasiswa ini bisa dijadikan mentor bagi mahasiswa lain yang berisiko.")
 
 with tab2:
     st.subheader("Detail Fitur")
