@@ -5,7 +5,7 @@ import time
 
 # 1. PAGE CONFIG
 st.set_page_config(
-    page_title="Student Success Tracker",
+    page_title="Edutech Corporate",
     page_icon="🎓",
     layout="wide"
 )
@@ -43,7 +43,7 @@ with st.sidebar:
     st.info("Sistem ini menggunakan algoritma Random Forest dengan akurasi yang telah diuji.")
 
 # 4. MAIN CONTENT
-st.title("🎓 Student Attrition Diagnostic System")
+st.title("🎓 Student Diagnostic System")
 st.write("Gunakan sistem ini untuk mendeteksi dini risiko dropout mahasiswa.")
 
 # Menggunakan Tabs untuk Navigasi
