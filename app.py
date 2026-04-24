@@ -2,51 +2,46 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# CONFIG & LOAD
-st.set_page_config(page_title="Student Success Tracker", page_icon="🎓")
+# 1. SETTING PAGE & LOAD MODEL
+st.set_page_config(page_title="Student Tracker", page_icon="🎓")
 
+@st.cache_resource
 def load_model():
     return joblib.load('model/model_rf_deploy.pkl')
 
 model = load_model()
 
-# UI HEADER
-st.title("🎓 Student Success Predictor")
-st.caption("Predicting student outcomes based on academic and financial indicators.")
+# 2. UI HEADER
+st.title("🎓 Prediksi Kelulusan Mahasiswa")
+st.markdown("---")
 
-# SIDEBAR
-with st.sidebar:
-    st.header("Help & Info")
-    st.info("""
-    Isi data mahasiswa di samping kanan untuk mendapatkan prediksi.
-    Model ini menggunakan 10 fitur utama yang paling berpengaruh terhadap kelulusan.
-    """)
-    st.divider()
-    st.write("v1.0.0 | Created by [Nama Lu]")
-
-# INPUT FORM
-st.subheader("Student Profile")
-with st.container(border=True):
+# 3. INPUT FORM
+with st.form("prediction_form"):
+    st.subheader("📝 Data Akademik & Profil")
+    
     col1, col2 = st.columns(2)
     
     with col1:
-        s2_approved = st.number_input("SKS Lulus Sem 2", 0, 30, 5)
-        s2_grade = st.number_input("IPK Sem 2", 0.0, 20.0, 12.0)
-        s1_approved = st.number_input("SKS Lulus Sem 1", 0, 30, 5)
-        s1_grade = st.number_input("IPK Sem 1", 0.0, 20.0, 12.0)
-        app_mode = st.number_input("Application Mode (Code)", 1, 100, 1)
+        s1_grade = st.number_input("IPK Semester 1 (0-20)", 0.0, 20.0, 12.0)
+        s1_approved = st.number_input("SKS Lulus Semester 1", 0, 30, 10)
+        s2_grade = st.number_input("IPK Semester 2 (0-20)", 0.0, 20.0, 12.0)
+        s2_approved = st.number_input("SKS Lulus Semester 2", 0, 30, 10)
+        age = st.slider("Usia Saat Mendaftar", 15, 60, 20)
 
     with col2:
-        age = st.number_input("Usia Saat Daftar", 15, 80, 20)
-        tuition = st.radio("Uang Kuliah Lunas?", ["Ya", "Tidak"], horizontal=True)
-        scholarship = st.radio("Penerima Beasiswa?", ["Ya", "Tidak"], horizontal=True)
-        debtor = st.radio("Ada Tunggakan Utang?", ["Ya", "Tidak"], horizontal=True)
-        gender = st.selectbox("Gender", ["Wanita", "Pria"])
+        gender = st.selectbox("Jenis Kelamin", ["Wanita", "Pria"])
+        scholarship = st.selectbox("Penerima Beasiswa?", ["Ya", "Tidak"])
+        tuition = st.selectbox("Biaya Kuliah Lunas?", ["Ya", "Tidak"])
+        debtor = st.selectbox("Punya Hutang/Tunggakan?", ["Ya", "Tidak"])
+        app_mode = st.number_input("Mode Aplikasi (Kode)", 1, 100, 1)
 
-# PREDICTION LOGIC
-if st.button("Run Analysis", type="primary", use_container_width=True):
-    # Mapping input ke format model
-    data = {
+    # Submit Button
+    submit = st.form_submit_button("Cek Hasil Prediksi", use_container_width=True)
+
+# 4. PREDICTION LOGIC
+if submit:
+    # Mapping sederhana
+    input_data = {
         'Curricular_units_2nd_sem_approved': s2_approved,
         'Curricular_units_2nd_sem_grade': s2_grade,
         'Curricular_units_1st_sem_approved': s1_approved,
@@ -58,16 +53,18 @@ if st.button("Run Analysis", type="primary", use_container_width=True):
         'Gender': 1 if gender == "Pria" else 0,
         'Application_mode': app_mode
     }
-    
-    df_input = pd.DataFrame([data])
+
+    df_input = pd.DataFrame([input_data])
     prediction = model.predict(df_input)[0]
-    
-    st.divider()
-    
-    # Result Display
+
+    # 5. DISPLAY RESULT
+    st.markdown("### 📊 Hasil Analisis:")
     if prediction == 1:
-        st.error("### 🚨 Result: Potential Dropout")
-        st.write("Mahasiswa ini masuk kategori berisiko tinggi. Disarankan untuk segera dilakukan pendampingan akademik.")
+        st.error("⚠️ **Hasil: Berisiko Dropout**")
+        st.info("Saran: Mahasiswa memerlukan pendampingan akademik atau bantuan finansial lebih lanjut.")
     else:
-        st.success("### ✅ Result: Likely to Graduate")
-        st.write("Performa mahasiswa terpantau stabil dan berpotensi besar untuk lulus tepat waktu.")
+        st.success("✅ **Hasil: Berpotensi Lulus (Graduate)**")
+        st.info("Saran: Pertahankan performa akademik dan jaga kestabilan finansial.")
+
+# 6. FOOTER
+st.sidebar.caption("Created by Naufal Daffa Erlangga")

@@ -63,7 +63,7 @@ Proyek ini menyertakan prototipe sistem prediksi berbasis web menggunakan **Stre
 3. Buka browser di alamat `http://localhost:8501`.
 4. Masukkan parameter data mahasiswa pada input yang disediakan untuk melihat hasil prediksi (**Graduate** atau **Dropout**).
 
-**Link Prototype:** [MASUKKAN_LINK_STREAMLIT_CLOUD_JIKA_ADA_ATAU_LOCAL_LINK]
+**Link Prototype:** [edutech-corporate](https://edutech-corporate.streamlit.app/)
 
 ## Conclusion
 Berdasarkan hasil analisis dan pemodelan, dapat disimpulkan bahwa penurunan performa akademik di semester kedua merupakan indikator terkuat mahasiswa akan dropout. Selain itu, kondisi finansial (debtor) memiliki pengaruh besar, di mana mahasiswa dengan tunggakan biaya memiliki risiko berhenti kuliah jauh lebih tinggi. Beasiswa terbukti menjadi faktor pendukung utama yang menjaga tingkat kelulusan tetap tinggi.
