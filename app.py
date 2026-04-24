@@ -100,18 +100,36 @@ with tab1:
                     st.progress(conf_score)
                 
                 st.markdown("### 📋 Rekomendasi Action Items")
-                st.write("Berdasarkan deteksi risiko, berikut langkah yang disarankan:")
+                st.write("Berdasarkan hasil diagnosa dan perbandingan performa:")
+
+                # 1. Monitoring Performa Akademik (S1 vs S2)
+                if s1_grade > s2_grade or s1_approved > s2_approved:
+                    st.warning("""
+                    **1. Monitoring Penurunan Nilai:** Mengaktifkan program pendampingan (mentoring) khusus bagi mahasiswa yang nilai atau SKS semester 2-nya turun dibanding semester 1.
+                    """)
+                elif s1_grade < s2_grade or s1_approved < s2_approved:
+                    st.success("""
+                    **1. Apresiasi & Konsistensi:** Mahasiswa menunjukkan tren peningkatan performa di semester 2. Dorong untuk mempertahankan konsistensi agar peluang lulus tepat waktu tetap terjaga.
+                    """)
+                else:
+                    st.info("**1. Pemantauan Rutin:** Performa akademik mahasiswa stabil. Tetap pantau progresnya agar tidak mengalami kejenuhan.")
+
+                # 2. Skema Keringanan Biaya (Finansial - Debtor/Tuition)
+                if debtor == "Ya" or tuition == "Tidak":
+                    st.warning("""
+                    **2. Pemberian Skema Keringanan Biaya:** Memberikan opsi cicilan atau bantuan darurat bagi mahasiswa yang terdeteksi memiliki masalah finansial (Debtor/Tunggakan) agar tidak terpaksa putus kuliah.
+                    """)
                 
-                # 1. Action buat yang nilainya turun (Peka Nilai)
-                if s2_grade < s1_grade:
-                    st.warning("**1. Monitoring Penurunan Nilai:** Mengaktifkan program pendampingan (mentoring) khusus karena nilai semester 2 turun dibanding semester 1.")
+                # 3. Optimasi Beasiswa (Finansial - Scholarship)
+                if scholarship == "Tidak" and prediction == 1:
+                    st.info("""
+                    **3. Peninjauan Beasiswa:** Mahasiswa berisiko ini tidak memiliki beasiswa. Perlu dicek apakah layak mendapatkan bantuan dana untuk meningkatkan retensi.
+                    """)
                 
-                # 2. Action buat yang punya hutang (Peka Finansial)
-                if debtor == "Ya":
-                    st.warning("**2. Pemberian Skema Keringanan Biaya:** Memberikan opsi cicilan atau bantuan darurat karena mahasiswa terdeteksi sebagai 'Debtor'.")
-                
-                # 3. Action umum
-                st.info("**3. Automasi Prediksi:** Mengintegrasikan model ini ke portal akademik sebagai sistem deteksi dini bagi dosen pembimbing.")
+                # 4. Automasi & Integrasi (Sistem)
+                st.info("""
+                **4. Automasi Prediksi:** Mengintegrasikan model machine learning ini ke dalam portal akademik sebagai sistem deteksi dini bagi dosen pembimbing akademik.
+                """)
 
             else:
                 with res_col1:
